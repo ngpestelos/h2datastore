@@ -13,9 +13,9 @@ class EntitiesTest extends GroovyTestCase {
   }
 
   void testSimplePut() {
-    Entities.put(sql, "abc")
+    Entities.put(sql, "{\"abc\" : \"def\"}")
     def body = sql.rows("select * from entities")[0].body.characterStream.text
-    assertTrue "abc" == body
+    assertTrue "{\"abc\" : \"def\"}" == body
   }
 
   void testJsonPut() {
@@ -37,7 +37,7 @@ class EntitiesTest extends GroovyTestCase {
   }
 
   void testSimpleGet() {
-    assertNull Entities.get(sql, "abc")
+    assertTrue ([:] == Entities.get(sql, "{\"abc\" : \"def\"}"))
   }
 
   void testJsonGet() {
@@ -47,8 +47,8 @@ class EntitiesTest extends GroovyTestCase {
     def id = Entities.put(sql, json.toString())
     def res = Entities.get(sql, id)
     assertTrue 1 == res.added_id
-    assertTrue res.id instanceof java.util.UUID
-    assertTrue id == res.id.toString()
+    assertTrue res._id instanceof java.util.UUID
+    assertTrue id == res._id.toString()
     assertTrue res.updated_at instanceof java.sql.Timestamp
     res.body.getClass() instanceof org.h2.jdbc.JdbcClob
     def newJson = new JSONObject(res.body.characterStream.text)
@@ -66,7 +66,20 @@ class EntitiesTest extends GroovyTestCase {
     json.put("selling", new BigDecimal("10000000000.98")) // megabucks
     def id = Entities.put(sql, json.toString())
     assertTrue (1 == Entities.remove(sql, id))
-    assertNull Entities.get(sql, id)
+    assertTrue ([:] == Entities.get(sql, id))
+  }
+
+  void testJsonUpdate() {
+    def json = new JSONObject()
+    json.put("type", "item")
+    json.put("name", "Nesingwary 4000")
+    def id = Entities.put(sql, json.toString())
+    def res = Entities.get(sql, id)
+    def newJson = new JSONObject(res.body.characterStream.text)
+    newJson.put("buying", new BigDecimal("100"))
+    println Entities.put(sql, id, newJson.toString())
+    
+    println Entities.get(sql, id)
   }
 
   static void main(args) {
