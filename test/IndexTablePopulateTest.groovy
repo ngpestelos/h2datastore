@@ -7,8 +7,7 @@ import groovy.sql.Sql
 
 class IndexTablePopulateTest extends GroovyTestCase {
 
-  def sql
-
+  /*
   void setUp() {
     sql = Sql.newInstance("jdbc:h2:mem:populate")
     Entities.createTable(sql)
@@ -18,12 +17,20 @@ class IndexTablePopulateTest extends GroovyTestCase {
     def two = new JSONObject()
     two.put("name", "Fel Iron Musket")
     Entities.put(sql, two.toString())
-  }
+  }*/
 
-  // immediately after creating the table
-  // scroll through entities table
-  // if property is included, add entity to index
   void testPopulateIndex() {
+    def sql = Sql.newInstance("jdbc:h2:mem:populate")
+    def ent = Entities.getInstance(sql)
+
+    def one = new JSONObject()
+    one.put("name", "Nesingwary 4000")
+    ent.put(one.toString())
+
+    def two = new JSONObject()
+    two.put("name", "Fel Iron Musket")
+    ent.put(two.toString())
+
     def index = new Index(sql, "name")
     assertTrue (1 == index.find("Nesingwary 4000").size())
     assertTrue (1 == index.find("Fel Iron Musket").size())

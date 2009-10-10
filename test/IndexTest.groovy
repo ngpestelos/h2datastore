@@ -7,8 +7,8 @@ class IndexTest extends GroovyTestCase {
 
   void testPut() {
     def sql = Sql.newInstance("jdbc:h2:mem:put")
-    Entities.createTable(sql)
-    def id = Entities.put(sql, "{\"name\" : \"Nesingwary 4000\"}")
+    def ent = Entities.getInstance(sql)
+    def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
     index.createTable()
     
@@ -17,15 +17,15 @@ class IndexTest extends GroovyTestCase {
 
   void testFind() {
     def sql = Sql.newInstance("jdbc:h2:mem:find")
-    Entities.createTable(sql)
-    def id = Entities.put(sql, "{\"name\" : \"Nesingwary 4000\"}")
+    def ent = Entities.getInstance(sql)
+    def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
     index.createTable()
     index.put("Nesingwary 4000", id)
     
     assertTrue (1 == index.find("Nesingwary 4000").size())
 
-    Entities.put(sql, "Copper Ore")
+    ent.put("{\"name\" : \"Copper Ore\"}")
     assertTrue (0 == index.find("Copper Ore").size())
 
     index.put("Nesingwary 4000XP", id)
