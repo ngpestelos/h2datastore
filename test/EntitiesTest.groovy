@@ -76,12 +76,15 @@ class EntitiesTest extends GroovyTestCase {
     def id = Entities.put(sql, json.toString())
     def res = Entities.get(sql, id)
     def newJson = new JSONObject(res.body.characterStream.text)
-    newJson.put("buying", new BigDecimal("100"))
+    newJson.put("buying", new BigDecimal("100.00"))
     
     def updated = Entities.put(sql, id, newJson.toString())
     assertTrue (id == updated._id)
     assertTrue (res.updated_at < updated.updated_at)
-    println Entities.get(sql, id)
+    
+    def updatedRes = Entities.get(sql, id)
+    def updatedJson = new JSONObject(updatedRes.body.characterStream.text)
+    assertTrue (100 == updatedJson.get("buying"))
   }
 
   static void main(args) {

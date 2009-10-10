@@ -36,7 +36,10 @@ class Entities {
     static def get(sql, String _id) {
         def map = [:]
         sql.firstRow("select * from entities where _id = ?", [_id]).each {k, v ->
-            map[k.toLowerCase()] = v
+            if (k == "body")
+                map[k.toLowerCase()] = v.characterStream.text
+            else
+                map[k.toLowerCase()] = v
         }
         map
     }
