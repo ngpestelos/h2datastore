@@ -5,8 +5,11 @@ import java.util.UUID
 class Entities {
 
     def sql
+    def listeners
     
     private static def instance
+
+    private def Entities() { }
 
     static def getInstance(sql) {
         if (!instance)
@@ -14,7 +17,13 @@ class Entities {
 
         instance.sql = sql
         instance.createTable()
+        instance.listeners = []
         instance
+    }
+
+    def addListener(listener) {
+        if (!(listener in listeners))
+            listeners << listener
     }
 
     def createTable() {
@@ -36,12 +45,14 @@ class Entities {
         def _id = UUID.randomUUID().toString()
         def updated = new java.sql.Timestamp(new Date().getTime())
         sql.dataSet("entities").add("_id" : _id, "body": body, "updated_at": updated)
+        entityAdded(_id, body)
         return _id
     }
 
     def put(String _id, String body) {
         def updated = new java.sql.Timestamp(new Date().getTime())
         sql.executeUpdate("update entities set body = ?, updated_at = ? where _id = ?", [body, updated, _id])
+        entityUpdated(_id, body)
         return ["_id" : _id, "updated_at" : updated]
     }
 
@@ -58,7 +69,21 @@ class Entities {
     }
 
     def remove(String _id) {
-        sql.executeUpdate("delete from entities where _id = ?", [_id])
+        def res = sql.executeUpdate("delete from entities where _id = ?", [_id])
+        entityRemoved(_id)
+        res
+    }
+
+    private def entityAdded(_id, body) {
+        listeners.each { it.entityAdded(new DatastoreEvent(this, _id, body)) }
+    }
+
+    private def entityUpdated(_id, body) {
+        listeners.each { it.entityUpdated(new DatastoreEvent(this, _id, body)) }
+    }
+
+    private def entityRemoved(_id) {
+        listeners.each { it.entityRemoved(new DatastoreEvent(this, _id)) }
     }
 	
 }

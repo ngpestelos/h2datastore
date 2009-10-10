@@ -4,9 +4,11 @@ import java.util.EventListener
 
 interface DatastoreListener extends EventListener {
 
+    void entityAdded(event)
+
     void entityUpdated(event)
 
-    void entityDeleted(event)
+    void entityRemoved(event)
 
 }
 

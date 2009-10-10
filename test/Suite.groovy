@@ -31,6 +31,8 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("test/IndexTest")
     suite.add("test/EntitiesTest")
     suite.add("test/IndexTablePopulateTest")
+    suite.add("test/IndexEqualityTest")
+    suite.add("test/EntitiesListenerTest")
     suite.start()
   }
 

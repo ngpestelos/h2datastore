@@ -8,15 +8,14 @@ class IndexEqualityTest extends GroovyTestCase {
   def sql
   def entities
 
-  void setUp() {
-    sql = Sql.newInstance("jdbc:h2:mem:eq")
-    Entities.createTable()
-  }
-
   void testEquals() {
+    def sql = Sql.newInstance("jdbc:h2:mem:indexeq")
+    def entities = Entities.getInstance(sql) // will create entities table
     def one = new Index(sql, "foo")
     def two = new Index(sql, "bar")
     assertTrue (sql == sql)
+    assertTrue (one == one)
+    assertFalse (one == two)
   }
 
   static void main(args) {

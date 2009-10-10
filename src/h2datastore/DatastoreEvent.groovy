@@ -4,11 +4,19 @@ import java.util.EventObject
 
 class DatastoreEvent extends EventObject {
 
-    def entity
+    def id
+    def body
 
-    def DatastoreEvent(source, entity) {
+    def DatastoreEvent(source, id, body) {
         super(source)
-        this.entity = entity
+        this.id = id
+        this.body = body
+    }
+
+    def DatastoreEvent(source, id) {
+        super(source)
+        this.id = id
+        this.body = null
     }
 
     String toString() {
