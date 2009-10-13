@@ -3,6 +3,8 @@ package h2datastore
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.json.JSONObject
 
+import java.sql.Types
+
 /**
  * Index tables are used to query the entities table for certain properties
  */
@@ -13,11 +15,13 @@ class Index implements DatastoreListener {
     def property
     def sql
 
-    def Index(sql, property) {
+    def Index(sql, property, dataType = Types.VARCHAR) {
         if (sql == null)
             throw new IllegalArgumentException("SQL cannot be null.")
         if (property == null)
             throw new IllegalArgumentException("Property cannot be null.")
+        if (dataType != Types.VARCHAR)
+            throw new IllegalArgumentException("Keys can only be of varchar type.")
 
         this.sql = sql
         this.property = property
@@ -44,7 +48,8 @@ class Index implements DatastoreListener {
 
     def createTable() {
         // TODO allow for other data types (e.g. by date)
-        def query = "create table if not exists index_" + property + " ( " + property + " varchar(254)" +
+        // TODO dataType matches with SQL syntax for type
+        def query = "create table if not exists index_" + property + " ( " + property + " varchar(512)" +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
         sql.executeUpdate(query)
         def res = sql.firstRow("select count(entity_id) as rows from index_" + property)

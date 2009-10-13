@@ -53,6 +53,12 @@ class IndexTest extends GroovyTestCase {
     assertTrue (0 == fooIndex.count())
   }
 
+  void testInvalidDataType() {
+    def sql = Sql.newInstance("jdbc:h2:mem:inv")
+    def ent = Entities.getInstance(sql)
+    shouldFail { new Index(sql, "document_date", java.sql.Types.TIMESTAMP) }
+  }
+
   static void main(args) {
     junit.textui.TestRunner.run(IndexTest.class)
   }
