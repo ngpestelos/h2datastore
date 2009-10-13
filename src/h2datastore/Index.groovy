@@ -49,7 +49,7 @@ class Index implements DatastoreListener {
         sql.executeUpdate(query)
         def res = sql.firstRow("select count(entity_id) as rows from index_" + property)
         if (res.rows == 0)
-            populateTable()
+            populate()
     }
 
     def destroyTable() {
@@ -61,7 +61,7 @@ class Index implements DatastoreListener {
         "index_${property}"
     }
 
-    private def populateTable() {
+    private def populate() {
         sql.rows("select * from entities").each {
             def json = new JSONObject(it.body.characterStream.text)
             if (json.has(property))
