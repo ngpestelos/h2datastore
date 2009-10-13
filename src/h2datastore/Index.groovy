@@ -77,6 +77,11 @@ class Index implements DatastoreListener {
         return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
     }
 
+    def count() {
+        def res = sql.firstRow("select count(*) as numrows from " + getTableName())
+        res ? res["numrows"] : 0
+    }
+
     //// Callbacks
 
     void entityAdded(dsEvent) {
@@ -104,4 +109,10 @@ class Index implements DatastoreListener {
     }
 
     //// End Callbacks
+
+    static def getIndices(sql) {
+        def res = sql.rows("select table_name from information_schema.tables where table_name like 'INDEX%' order by table_name")
+        def tables = res.findAll { it['TABLE_NAME'] =~ /^INDEX_/ }
+        tables.collect { it['TABLE_NAME'].toLowerCase() }
+    }
 }

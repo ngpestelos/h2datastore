@@ -10,7 +10,6 @@ class IndexTest extends GroovyTestCase {
     def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
-    index.createTable()
     
     assertTrue (1 == index.put("Nesingwary 4000", id))
   }
@@ -20,7 +19,6 @@ class IndexTest extends GroovyTestCase {
     def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
-    index.createTable()
     index.put("Nesingwary 4000", id)
     
     assertTrue (1 == index.find("Nesingwary 4000").size())
@@ -33,6 +31,26 @@ class IndexTest extends GroovyTestCase {
     assertTrue (0 == index.find("Nesingwary 4000").size())
 
     index.destroyTable()
+  }
+
+  void testGetIndexes() {
+    def sql = Sql.newInstance("jdbc:h2:mem:idx")
+    def ent = Entities.getInstance(sql)
+    def id = ent.put("{\"name\" : \"Nesingwary 4000\", \"category\" : \"Guns\"}")
+    def nameIndex = new Index(sql, "name")
+    def categoryIndex = new Index(sql, "category")
+
+    assertTrue (2 == Index.getIndices(sql).size())
+    assertTrue ("index_name" in Index.getIndices(sql))
+    assertTrue ("index_category" in Index.getIndices(sql))
+  }
+
+  void testNonExistentProperty() {
+    def sql = Sql.newInstance("jdbc:h2:mem:ghost")
+    def ent = Entities.getInstance(sql)
+    def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
+    def fooIndex = new Index(sql, "foo")
+    assertTrue (0 == fooIndex.count())
   }
 
   static void main(args) {
