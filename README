@@ -1,0 +1,18 @@
+H2 datastore
+
+Provides utilities for common tasks and a simple key-value datastore implementation.
+
+1. Dependencies (see lib/)
+
+ * groovy
+ * h2
+ * json
+ * log4j
+ * commons-lang
+
+2. Usage
+
+2.1 Building a connection URL
+
+ A URL requires (1) a path (e.g. e:/mydbs/somedb), (2) a connection mode (see ConnectionMode),
+ and (3) a boolean parameter (assumes the database already exists)
