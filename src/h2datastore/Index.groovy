@@ -10,21 +10,24 @@ import java.sql.Types
  */
 class Index implements DatastoreListener {
 
-    // TODO support for multiple properties (I still need to figure out how a multi-key index works)
-    // TODO support for secondary index (search within an index)
     def property
     def sql
+    def dataType
+
+    // acceptable types
+    final def TYPES = [(Types.VARCHAR):'VARCHAR', (Types.TIMESTAMP):'TIMESTAMP']
 
     def Index(sql, property, dataType = Types.VARCHAR) {
         if (sql == null)
             throw new IllegalArgumentException("SQL cannot be null.")
         if (property == null)
             throw new IllegalArgumentException("Property cannot be null.")
-        if (dataType != Types.VARCHAR)
-            throw new IllegalArgumentException("Keys can only be of varchar type.")
+        if (!(dataType in getAcceptableTypes()))
+            throw new IllegalArgumentException("Keys can only be of varchar or timestamp types.")
 
         this.sql = sql
         this.property = property
+        this.dataType = dataType
         createTable()
     }
 
@@ -47,9 +50,7 @@ class Index implements DatastoreListener {
     }
 
     def createTable() {
-        // TODO allow for other data types (e.g. by date)
-        // TODO dataType matches with SQL syntax for type
-        def query = "create table if not exists index_" + property + " ( " + property + " varchar(512)" +
+        def query = "create table if not exists index_" + property + " ( " + property + " " + getType() +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
         sql.executeUpdate(query)
         def res = sql.firstRow("select count(entity_id) as rows from index_" + property)
@@ -62,15 +63,25 @@ class Index implements DatastoreListener {
         sql.executeUpdate(query)
     }
 
+    private def getType() {
+        TYPES[dataType]
+    }
+
+    private def getAcceptableTypes() {
+        TYPES.keySet()
+    }
+
     private def getTableName() {
         "index_${property}"
     }
 
     private def populate() {
-        sql.rows("select * from entities").each {
-            def json = new JSONObject(it.body.characterStream.text)
-            if (json.has(property))
-                put(json.get(property), it."_id")
+        Thread.start {
+            sql.rows("select * from entities").each {
+                def json = new JSONObject(it.body.characterStream.text)
+                if (json.has(property))
+                    put(json.get(property), it."_id")
+            }
         }
     }
 

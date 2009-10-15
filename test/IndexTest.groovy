@@ -3,20 +3,25 @@ import groovy.sql.Sql
 import h2datastore.Entities
 import h2datastore.Index
 
+import java.sql.Types
+
 class IndexTest extends GroovyTestCase {
 
+  def sql
+  def ent
+
+  void setUp() {
+    sql = Sql.newInstance("jdbc:h2:mem:")
+    ent = Entities.getInstance(sql)
+  }
+  
   void testPut() {
-    def sql = Sql.newInstance("jdbc:h2:mem:put")
-    def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
-    
     assertTrue (1 == index.put("Nesingwary 4000", id))
   }
 
   void testFind() {
-    def sql = Sql.newInstance("jdbc:h2:mem:find")
-    def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def index = new Index(sql, "name")
     index.put("Nesingwary 4000", id)
@@ -29,13 +34,9 @@ class IndexTest extends GroovyTestCase {
     index.put("Nesingwary 4000XP", id)
     assertTrue (1 == index.find("Nesingwary 4000XP").size())
     assertTrue (0 == index.find("Nesingwary 4000").size())
-
-    index.destroyTable()
   }
 
   void testGetIndexes() {
-    def sql = Sql.newInstance("jdbc:h2:mem:idx")
-    def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\", \"category\" : \"Guns\"}")
     def nameIndex = new Index(sql, "name")
     def categoryIndex = new Index(sql, "category")
@@ -46,17 +47,18 @@ class IndexTest extends GroovyTestCase {
   }
 
   void testNonExistentProperty() {
-    def sql = Sql.newInstance("jdbc:h2:mem:ghost")
-    def ent = Entities.getInstance(sql)
     def id = ent.put("{\"name\" : \"Nesingwary 4000\"}")
     def fooIndex = new Index(sql, "foo")
     assertTrue (0 == fooIndex.count())
   }
 
   void testInvalidDataType() {
-    def sql = Sql.newInstance("jdbc:h2:mem:inv")
-    def ent = Entities.getInstance(sql)
-    shouldFail { new Index(sql, "document_date", java.sql.Types.TIMESTAMP) }
+    shouldFail { new Index(sql, "document_date", Types.INTEGER) }
+  }
+
+  void testValidDataType() {
+    assertNotNull (new Index(sql, "document_date", Types.TIMESTAMP))
+    assertNotNull (new Index(sql, "name", Types.VARCHAR))
   }
 
   static void main(args) {
