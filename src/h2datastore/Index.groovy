@@ -29,6 +29,7 @@ class Index implements DatastoreListener {
         this.property = property
         this.dataType = dataType
         createTable()
+        Entities.getInstance(sql).addListener(this)
     }
 
     String toString() {
@@ -122,6 +123,10 @@ class Index implements DatastoreListener {
             if (json.has(property))
                 remove(dsEvent.id)
         }
+    }
+
+    void cleanup(dsEvent) {
+        populate()
     }
 
     //// End Callbacks

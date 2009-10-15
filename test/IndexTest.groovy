@@ -29,7 +29,7 @@ class IndexTest extends GroovyTestCase {
     assertTrue (1 == index.find("Nesingwary 4000").size())
 
     ent.put("{\"name\" : \"Copper Ore\"}")
-    assertTrue (0 == index.find("Copper Ore").size())
+    assertTrue (1 == index.find("Copper Ore").size())
 
     index.put("Nesingwary 4000XP", id)
     assertTrue (1 == index.find("Nesingwary 4000XP").size())

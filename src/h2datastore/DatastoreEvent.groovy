@@ -19,6 +19,10 @@ class DatastoreEvent extends EventObject {
         this.body = null
     }
 
+    def DatastoreEvent(source) {
+        super(source)
+    }
+
     String toString() {
         "Datastore Event: ${source}"
     }
