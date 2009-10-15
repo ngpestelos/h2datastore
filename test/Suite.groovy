@@ -33,6 +33,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("test/IndexTablePopulateTest")
     suite.add("test/IndexEqualityTest")
     suite.add("test/EntitiesListenerTest")
+    suite.add("test/BuildURLTest")
     suite.start()
   }
 
