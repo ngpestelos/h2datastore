@@ -29,10 +29,10 @@ class Suite extends groovy.util.GroovyTestSuite {
 
   static void main(args) {
     def suite = new Suite()
-    suite.add("spec/h2datastore/StartServer")
     suite.add("spec/h2datastore/StandaloneURL")
     suite.add("spec/h2datastore/MemoryURL")
     suite.add("spec/h2datastore/NetworkURL")
+    suite.add("spec/h2datastore/GetConnectionFromServer")
     suite.start()
   }
 }

@@ -2,3 +2,4 @@
 * Create network URL
 * Create memory URL
 * Force IFEXISTS property
+* Get a Sql object from a TCP server (localhost)
