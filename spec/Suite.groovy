@@ -1,0 +1,38 @@
+import junit.framework.TestResult
+
+class Suite extends groovy.util.GroovyTestSuite {
+  
+  def add(test) {
+    addTestSuite(compile("${test}.groovy"))
+  }
+
+  // TODO Machine-readable results
+  def start() {
+    println "Running tests..."
+    
+    def result = new TestResult()
+    run(result)
+
+    println "*** Tests Completed *** "
+    println """T: ${result.runCount()} F: ${result.failureCount()} E: ${result.errorCount()}"""
+
+    if (result.failureCount() > 0) {
+      println "*** Failures ***"
+      result.failures().each { println it }
+    }
+
+    if (result.errorCount() > 0) {
+      println "*** Errors ***"
+      result.errors().each { println it }
+    }
+  }
+
+  static void main(args) {
+    def suite = new Suite()
+    suite.add("spec/h2datastore/StartServer")
+    suite.add("spec/h2datastore/StandaloneURL")
+    suite.add("spec/h2datastore/MemoryURL")
+    suite.add("spec/h2datastore/NetworkURL")
+    suite.start()
+  }
+}
