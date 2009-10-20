@@ -33,6 +33,8 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/MemoryURL")
     suite.add("spec/h2datastore/NetworkURL")
     suite.add("spec/h2datastore/GetConnectionFromServer")
+    suite.add("spec/h2datastore/EmptyEntities")
+    suite.add("spec/h2datastore/PutEntity")
     suite.start()
   }
 }
