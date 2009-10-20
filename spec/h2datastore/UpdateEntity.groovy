@@ -7,11 +7,17 @@ class UpdateEntity extends GroovyTestCase {
   def url
   def sql
   def entities
+  def updated
 
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
     entities = Entities.getInstance(sql)
+    updated = 0
+    def listener = new Expando()
+    listener.entityAdded = { }
+    listener.entityUpdated = { updated += 1 }
+    entities.addListener(listener)
   }
 
   void testUpdateOne() {
@@ -25,6 +31,9 @@ class UpdateEntity extends GroovyTestCase {
     // then
     assertTrue (id == res._id)
     assertTrue (res.updated_at > doc.updated_at)
+
+    // ...and a listener should get an event
+    assertTrue (1 == updated)
   }
 
   void testUpdateNone() {
