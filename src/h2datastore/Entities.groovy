@@ -49,9 +49,12 @@ class Entities {
         return _id
     }
 
-    def put(String _id, String body) {
+    def update(String _id, String body) {
         def updated = new java.sql.Timestamp(new Date().getTime())
-        sql.executeUpdate("update entities set body = ?, updated_at = ? where _id = ?", [body, updated, _id])
+        def rows_affected = sql.executeUpdate("update entities set body = ?, updated_at = ? where _id = ?", [body, updated, _id])
+        if (rows_affected == 0)
+          return [:]
+
         entityUpdated(_id, body)
         return ["_id" : _id, "updated_at" : updated]
     }
