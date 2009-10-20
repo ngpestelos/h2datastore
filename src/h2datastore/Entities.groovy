@@ -53,7 +53,7 @@ class Entities {
         def updated = new java.sql.Timestamp(new Date().getTime())
         def rows_affected = sql.executeUpdate("update entities set body = ?, updated_at = ? where _id = ?", [body, updated, _id])
         if (rows_affected == 0)
-          return [:]
+            return [:]
 
         entityUpdated(_id, body)
         return ["_id" : _id, "updated_at" : updated]
@@ -73,9 +73,12 @@ class Entities {
     }
 
     def remove(String _id) {
-        def res = sql.executeUpdate("delete from entities where _id = ?", [_id])
+        def rows_affected = sql.executeUpdate("delete from entities where _id = ?", [_id])
+        if (rows_affected == 0)
+            return rows_affected
+
         entityRemoved(_id)
-        res
+        return rows_affected
     }
 
     private def entityAdded(_id, body) {

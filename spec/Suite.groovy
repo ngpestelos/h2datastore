@@ -36,6 +36,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/EmptyEntities")
     suite.add("spec/h2datastore/PutEntity")
     suite.add("spec/h2datastore/UpdateEntity")
+    suite.add("spec/h2datastore/RemoveEntity")
     suite.start()
   }
 }
