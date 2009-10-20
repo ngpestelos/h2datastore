@@ -42,6 +42,9 @@ class UpdateEntity extends GroovyTestCase {
 
     // then
     assertTrue ([:] == res)
+
+    // ...and no events have been sent
+    assertTrue (0 == updated)
   }
 
 }
