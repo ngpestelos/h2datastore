@@ -56,12 +56,13 @@ class Entities {
         return ["_id" : _id, "updated_at" : updated]
     }
 
-    // Returns a Map or null
     def get(String _id) {
         def map = [:]
-        sql.firstRow("select * from entities where _id = ?", [_id]).each {k, v ->
-            if (k == "body")
+        sql.firstRow("select * from entities where _id = ?", [_id]).each { k, v ->
+            if (k == "BODY")
                 map[k.toLowerCase()] = v.characterStream.text
+            else if (k == "_ID")
+                map[k.toLowerCase()] = v.toString()
             else
                 map[k.toLowerCase()] = v
         }
