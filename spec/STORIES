@@ -1,5 +1,12 @@
-* Create standalone URL
-* Create network URL
-* Create memory URL
-* Force IFEXISTS property
-* Get a Sql object from a TCP server (localhost)
+* <del>Create standalone URL</del>
+* <del>Create network URL</del>
+* <del>Create memory URL</del>
+* <del>Force IFEXISTS property</del>
+* <del>Get a Sql object from a TCP server (localhost)</del>
+* <del>Empty entities table</del>
+* Put an Entity (events)
+* Update an Entity (events)
+* Remove an Entity (events)
+* Create an Index on a Property
+* Fetch date from an Index
+* Create a Secondary Index Using an Index and a Closure
