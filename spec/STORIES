@@ -5,8 +5,6 @@
 * <del>Get a Sql object from a TCP server (localhost)</del>
 * <del>Empty entities table</del>
 * <del>Put an Entity (events)</del>
-* Update an Entity (events)
-* Remove an Entity (events)
-* Create an Index on a Property
-* Fetch data from an Index
-* Create a Secondary Index Using an Index and a Closure
+* <del>Update an Entity (events)</del>
+* <del>Remove an Entity (events)</del>
+* Get an Index on a Property
