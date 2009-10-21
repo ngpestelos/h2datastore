@@ -2,34 +2,30 @@ package h2datastore
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.json.JSONObject
-
 import java.sql.Types
 
 /**
  * Index tables are used to query the entities table for certain properties
+ *
+ * Assumes Entity bodies are JSON objects
  */
 class Index implements DatastoreListener {
 
     def property
     def sql
-    def dataType
+    def entities
 
-    // acceptable types
-    final def TYPES = [(Types.VARCHAR):'VARCHAR', (Types.TIMESTAMP):'TIMESTAMP']
-
-    def Index(sql, property, dataType = Types.VARCHAR) {
+    protected def Index(sql, property, entities) {
         if (sql == null)
             throw new IllegalArgumentException("SQL cannot be null.")
         if (property == null)
             throw new IllegalArgumentException("Property cannot be null.")
-        if (!(dataType in getAcceptableTypes()))
-            throw new IllegalArgumentException("Keys can only be of varchar or timestamp types.")
 
         this.sql = sql
         this.property = property
-        this.dataType = dataType
+        this.entities = entities
         createTable()
-        Entities.getInstance(sql).addListener(this)
+        populateTable()
     }
 
     String toString() {
@@ -37,45 +33,49 @@ class Index implements DatastoreListener {
     }
 
     def find(value) {
-        def table = "index_${property}"
-        sql.rows("select entities.* from ${table} join entities on ${table}.entity_id = entities._id where ${table}.${property} = ?", [value])
+        def table = getTableName()
+        def res = sql.firstRow("select entity_id from ${table} where ${property} = ?", [value])
+        if (!res)
+            return null
+
+        entities.get(res["ENTITY_ID"].toString())
     }
 
-    def put(value, entityID) {
-        def table = "index_${property}"
-        sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, entityID])
+    def put(value, eid) {
+        def table = getTableName()
+        sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
     }
 
+    private def createTable() {
+        // Note: Types are fixed to VARCHAR
+        def query = "create table if not exists index_" + property + " ( " + property + " " + "varchar(768)" +
+            " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
+        sql.executeUpdate(query)
+    }
+
+    private def populateTable() {
+        if (size() == 0) {
+            sql.rows("select * from entities").each {
+                def json = new JSONObject(it.body.characterStream.text)
+                if (json.has(property))
+                    put(json.get(property), it."_id")   
+            }
+        }
+    }
+
+    /*
     def remove(entityID) {
         sql.executeUpdate("delete from ${getTableName()} where entity_id = ?", [entityID])
-    }
+    }*/
 
-    def createTable() {
+    /*
+    private def createTable() {
         def query = "create table if not exists index_" + property + " ( " + property + " " + getType() +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
         sql.executeUpdate(query)
-        def res = sql.firstRow("select count(entity_id) as rows from index_" + property)
-        if (res.rows == 0)
-            populate()
-    }
+    }*/
 
-    def destroyTable() {
-        def query = "drop table index_" + property + " if exists"
-        sql.executeUpdate(query)
-    }
-
-    private def getType() {
-        TYPES[dataType]
-    }
-
-    private def getAcceptableTypes() {
-        TYPES.keySet()
-    }
-
-    private def getTableName() {
-        "index_${property}"
-    }
-
+    /*
     private def populate() {
         Thread.start {
             sql.rows("select * from entities").each {
@@ -84,17 +84,38 @@ class Index implements DatastoreListener {
                     put(json.get(property), it."_id")
             }
         }
+    }*/
+
+    /*
+    def destroyTable() {
+        def query = "drop table index_" + property + " if exists"
+        sql.executeUpdate(query)
+    }*/
+
+    /*
+    private def getType() {
+        TYPES[dataType]
+    }*/
+
+    /*
+    private def getAcceptableTypes() {
+        TYPES.keySet()
+    }*/
+
+    private def getTableName() {
+        "index_${property}"
     }
 
+    /*
     boolean equals(obj) {
         return obj instanceof Index && this.hashCode() == obj.hashCode()
     }
 
     int hashCode() {
         return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
-    }
+    }*/
 
-    def count() {
+    def size() {
         def res = sql.firstRow("select count(*) as numrows from " + getTableName())
         res ? res["numrows"] : 0
     }
@@ -102,38 +123,32 @@ class Index implements DatastoreListener {
     //// Callbacks
 
     void entityAdded(dsEvent) {
-        Thread.start {
+        /*Thread.start {
             def json = new JSONObject(dsEvent.body)
             if (json.has(property))
                 put(json.get(property), dsEvent.id)
-        }
+        }*/
     }
 
     void entityUpdated(dsEvent) {
-        Thread.start {
+        /*Thread.start {
             def json = new JSONObject(dsEvent.body)
             if (json.has(property))
                 put(json.get(property), dsEvent.id)
-        }
+        }*/
     }
 
     void entityRemoved(dsEvent) {
-        Thread.start {
+        /*Thread.start {
             def json = new JSONObject(dsEvent.body)
             if (json.has(property))
                 remove(dsEvent.id)
-        }
+        }*/
     }
 
     void cleanup(dsEvent) {
-        populate()
+        //populate()
     }
 
     //// End Callbacks
-
-    static def getIndices(sql) {
-        def res = sql.rows("select table_name from information_schema.tables where table_name like 'INDEX%' order by table_name")
-        def tables = res.findAll { it['TABLE_NAME'] =~ /^INDEX_/ }
-        tables.collect { it['TABLE_NAME'].toLowerCase() }
-    }
 }

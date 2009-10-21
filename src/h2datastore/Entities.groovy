@@ -81,6 +81,10 @@ class Entities {
         return rows_affected
     }
 
+    def getIndex(String property) {
+        def index = new Index(sql, property, this)
+    }
+
     private def entityAdded(_id, body) {
         listeners.each { it.entityAdded(new DatastoreEvent(this, _id, body)) }
     }
