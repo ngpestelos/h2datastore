@@ -63,10 +63,9 @@ class Index implements DatastoreListener {
         }
     }
 
-    /*
     def remove(entityID) {
         sql.executeUpdate("delete from ${getTableName()} where entity_id = ?", [entityID])
-    }*/
+    }
 
     /*
     def destroyTable() {
@@ -111,19 +110,14 @@ class Index implements DatastoreListener {
     }
 
     void entityUpdated(dsEvent) {
-        /*Thread.start {
-            def json = new JSONObject(dsEvent.body)
-            if (json.has(property))
-                put(json.get(property), dsEvent.id)
-        }*/
+        def json = new JSONObject(dsEvent.body)
+        if (json.has(property))
+            put(json.get(property), dsEvent.id)
     }
 
     void entityRemoved(dsEvent) {
-        /*Thread.start {
-            def json = new JSONObject(dsEvent.body)
-            if (json.has(property))
-                remove(dsEvent.id)
-        }*/
+        def table = getTableName()
+        sql.executeUpdate("delete from ${table} where entity_id = ?", [dsEvent.id])
     }
 
     void cleanup(dsEvent) {
