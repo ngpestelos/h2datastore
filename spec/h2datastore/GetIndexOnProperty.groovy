@@ -35,9 +35,21 @@ class GetIndexOnProperty extends GroovyTestCase {
 
     // then
     def res = index.find("foo")
-    println res
-  } 
- 
+    assertNotNull res
+  }
 
-  // non-empty database, index on some property, get this entity
+  void testNoPropertiesMatching() {
+    // given
+    def doc = new JSONObject()
+    doc.put("name", "foo")
+    doc.put("category", "abc")
+
+    // when
+    def index = entities.getIndex("supplier")
+
+    // then
+    def res = index.find("bar")
+    assertNull res
+  } 
+
 }
