@@ -69,24 +69,6 @@ class Index implements DatastoreListener {
     }*/
 
     /*
-    private def createTable() {
-        def query = "create table if not exists index_" + property + " ( " + property + " " + getType() +
-            " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
-        sql.executeUpdate(query)
-    }*/
-
-    /*
-    private def populate() {
-        Thread.start {
-            sql.rows("select * from entities").each {
-                def json = new JSONObject(it.body.characterStream.text)
-                if (json.has(property))
-                    put(json.get(property), it."_id")
-            }
-        }
-    }*/
-
-    /*
     def destroyTable() {
         def query = "drop table index_" + property + " if exists"
         sql.executeUpdate(query)
@@ -123,11 +105,9 @@ class Index implements DatastoreListener {
     //// Callbacks
 
     void entityAdded(dsEvent) {
-        /*Thread.start {
-            def json = new JSONObject(dsEvent.body)
-            if (json.has(property))
-                put(json.get(property), dsEvent.id)
-        }*/
+        def json = new JSONObject(dsEvent.body)
+        if (json.has(property))
+            put(json.get(property), dsEvent.id)
     }
 
     void entityUpdated(dsEvent) {

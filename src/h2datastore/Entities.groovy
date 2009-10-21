@@ -83,6 +83,8 @@ class Entities {
 
     def getIndex(String property) {
         def index = new Index(sql, property, this)
+        addListener(index)
+        index
     }
 
     private def entityAdded(_id, body) {

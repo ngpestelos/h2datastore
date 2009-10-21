@@ -38,6 +38,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/UpdateEntity")
     suite.add("spec/h2datastore/RemoveEntity")
     suite.add("spec/h2datastore/GetIndexOnProperty")
+    suite.add("spec/h2datastore/PutIndex")
     suite.start()
   }
 }

@@ -7,4 +7,7 @@
 * <del>Put an Entity (events)</del>
 * <del>Update an Entity (events)</del>
 * <del>Remove an Entity (events)</del>
-* Get an Index on a Property
+* <del>Get an Index on a Property</del>
+* Put Index keys after Putting Entities
+* Remove Index keys after Removing Entities
+* Update Index keys after Updating Entities
