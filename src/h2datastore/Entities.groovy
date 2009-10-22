@@ -81,8 +81,8 @@ class Entities {
         return rows_affected
     }
 
-    def getIndex(String property) {
-        def index = new Index(sql, property, this)
+    def getIndex(String property, Boolean timestamp = false) {
+        def index = new Index(sql, property, this, timestamp)
         addListener(index)
         index
     }

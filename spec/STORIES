@@ -8,6 +8,7 @@
 * <del>Update an Entity (events)</del>
 * <del>Remove an Entity (events)</del>
 * <del>Get an Index on a Property</del>
-* Put Index keys after Putting Entities
-* Remove Index keys after Removing Entities
-* Update Index keys after Updating Entities
+* <del>Put Index keys after Putting Entities</del>
+* <del>Remove Index keys after Removing Entities</del>
+* <del>Update Index keys after Updating Entities</del>
+* <del>Get Index with Timestamp keys</del>

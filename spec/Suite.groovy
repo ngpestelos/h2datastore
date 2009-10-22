@@ -41,6 +41,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/PutIndex")
     suite.add("spec/h2datastore/RemoveIndex")
     suite.add("spec/h2datastore/UpdateIndex")
+    suite.add("spec/h2datastore/GetTimestampIndex")
     suite.start()
   }
 }

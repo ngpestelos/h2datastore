@@ -15,7 +15,7 @@ class Index implements DatastoreListener {
     def sql
     def entities
 
-    protected def Index(sql, property, entities) {
+    protected def Index(sql, property, entities, Boolean timestamp = false) {
         if (sql == null)
             throw new IllegalArgumentException("SQL cannot be null.")
         if (property == null)
@@ -24,7 +24,7 @@ class Index implements DatastoreListener {
         this.sql = sql
         this.property = property
         this.entities = entities
-        createTable()
+        createTable(timestamp)
         populateTable()
     }
 
@@ -46,9 +46,9 @@ class Index implements DatastoreListener {
         sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
     }
 
-    private def createTable() {
-        // Note: Types are fixed to VARCHAR
-        def query = "create table if not exists index_" + property + " ( " + property + " " + "varchar(768)" +
+    private def createTable(Boolean timestamp) {
+        def dataType = timestamp ? "bigint" : "varchar(768)"
+        def query = "create table if not exists index_" + property + " ( " + property + " " + dataType +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
         sql.executeUpdate(query)
     }
