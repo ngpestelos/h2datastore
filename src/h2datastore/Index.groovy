@@ -32,6 +32,15 @@ class Index implements DatastoreListener {
         "Index for ${property}"
     }
 
+    /**
+     * Search entities having property matching value. Returns the first one found.
+     *
+     * Examples:
+     *  def types = entities.getIndex("type")
+     *  def item = types.find("item") // returns the first entity found having type = "item"
+     *
+     * @see Entities.get
+     */
     def find(value) {
         def table = getTableName()
         def res = sql.firstRow("select entity_id from ${table} where ${property} = ?", [value])

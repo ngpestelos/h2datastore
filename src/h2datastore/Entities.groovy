@@ -68,6 +68,12 @@ class Entities {
         return ["_id" : _id, "updated_at" : updated]
     }
 
+    /**
+     * Fetches an Entity for the specified identifier
+     *
+     * @return Map having these attributes: _id, body, and updated_at
+     * 
+     */
     def get(String _id) {
         def map = [:]
         sql.firstRow("select * from entities where _id = ?", [_id]).each { k, v ->
