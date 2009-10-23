@@ -50,6 +50,11 @@ class Index implements DatastoreListener {
         entities.get(res["ENTITY_ID"].toString())
     }
 
+    /**
+     * Search entities having property matching value. Returns a list of matching Entities
+     *
+     * @see Index.find
+     */
     List findAll(value) {
         def table = getTableName()
         def res = sql.rows("select entity_id from ${table} where ${property} = ?", [value])
