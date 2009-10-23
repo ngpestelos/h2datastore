@@ -50,6 +50,17 @@ class Index implements DatastoreListener {
         entities.get(res["ENTITY_ID"].toString())
     }
 
+    List findAll(value) {
+        def table = getTableName()
+        def res = sql.rows("select entity_id from ${table} where ${property} = ?", [value])
+        if (!res)
+            return []
+
+        res.collect {
+            entities.get(it["ENTITY_ID"].toString())
+        }
+    }
+
     def put(value, eid) {
         def table = getTableName()
         sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
