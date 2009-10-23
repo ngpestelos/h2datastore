@@ -24,8 +24,12 @@ class Index implements DatastoreListener {
         this.sql = sql
         this.property = property
         this.entities = entities
-        createTable(timestamp)
-        populateTable()
+        def tableExists = sql.firstRow("select TABLE_NAME from information_schema.tables where table_name = ?",
+            ["INDEX_" + property.toUpperCase()])
+        if (!tableExists) {
+            createTable(timestamp)
+            populateTable()
+        }
     }
 
     String toString() {
@@ -79,11 +83,11 @@ class Index implements DatastoreListener {
     }
 
     private def populateTable() {
-        if (size() == 0) {
+        Thread.start {
             sql.rows("select * from entities").each {
                 def json = new JSONObject(it.body.characterStream.text)
                 if (json.has(property))
-                    put(json.get(property), it."_id")   
+                    put(json.get(property), it."_id")
             }
         }
     }
