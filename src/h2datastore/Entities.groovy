@@ -54,6 +54,10 @@ class Entities {
         return _id
     }
 
+    def update(String _id, JSONObject json) {
+        update(_id, json.toString())
+    }
+
     def update(String _id, String body) {
         def updated = new java.sql.Timestamp(new Date().getTime())
         def rows_affected = sql.executeUpdate("update entities set body = ?, updated_at = ? where _id = ?", [body, updated, _id])

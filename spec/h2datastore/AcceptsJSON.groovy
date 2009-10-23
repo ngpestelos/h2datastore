@@ -26,4 +26,19 @@ class AcceptsJSON extends GroovyTestCase {
     assertNotNull id
   }
 
+  void testUpdate() {
+    // given
+    def doc = new JSONObject()
+    doc.put("name", "Nesingwary 4000")
+    def id = entities.put(doc)
+
+    // when
+    doc.put("category", "Guns")
+    doc.put("level", 80)
+    def res = entities.update(id, doc)
+
+    // then
+    assertNotNull res
+  }
+
 }
