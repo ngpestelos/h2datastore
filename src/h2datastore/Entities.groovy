@@ -68,6 +68,10 @@ class Entities {
         return ["_id" : _id, "updated_at" : updated]
     }
 
+    def get(UUID _id) {
+        get(_id.toString())
+    }
+
     /**
      * Fetches an Entity for the specified identifier
      *
@@ -100,6 +104,13 @@ class Entities {
         def index = new Index(sql, property, this, timestamp)
         addListener(index)
         index
+    }
+
+    // @param list
+    // @param closure (accepts one element)
+    // @return another list
+    static def map(list, closure) {
+        list.collect { closure(it) }
     }
 
     private def entityAdded(_id, body) {

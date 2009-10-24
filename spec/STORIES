@@ -14,7 +14,6 @@
 * <del>Get Index with Timestamp keys</del>
 * <del>Put accepts JSON</del>
 * <del>Update accepts JSON</del>
-* Find an Entity having property = value
-* Find all Entities having properties = value
-* Filter the Index using a list of Entities
-* Reduce a list of Entities using some function
+* <del>Find an Entity having property = value</del>
+* <del>Find all Entities having properties = value</del>
+* mapreduce
