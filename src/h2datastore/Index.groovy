@@ -96,34 +96,9 @@ class Index implements DatastoreListener {
         sql.executeUpdate("delete from ${getTableName()} where entity_id = ?", [entityID])
     }
 
-    /*
-    def destroyTable() {
-        def query = "drop table index_" + property + " if exists"
-        sql.executeUpdate(query)
-    }*/
-
-    /*
-    private def getType() {
-        TYPES[dataType]
-    }*/
-
-    /*
-    private def getAcceptableTypes() {
-        TYPES.keySet()
-    }*/
-
     private def getTableName() {
         "index_${property}"
     }
-
-    /*
-    boolean equals(obj) {
-        return obj instanceof Index && this.hashCode() == obj.hashCode()
-    }
-
-    int hashCode() {
-        return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
-    }*/
 
     def size() {
         def res = sql.firstRow("select count(*) as numrows from " + getTableName())
