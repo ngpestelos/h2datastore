@@ -68,6 +68,23 @@ class Entities {
         return ["_id" : _id, "updated_at" : updated]
     }
 
+    def getAsJSON(UUID _ID) {
+        getAsJSON(_id.toString())
+    }
+
+    // @see Entities.get
+    def getAsJSON(String _id) {
+        def map = get(_id)
+        if (!map)
+            return null
+
+        def json = new JSONObject()
+        json.put("_id", map["_id"])
+        json.put("body", new JSONObject(map["body"]))
+        json.put("updated_at", map["updated_at"])
+        return json
+    }
+
     def get(UUID _id) {
         get(_id.toString())
     }

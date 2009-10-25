@@ -46,6 +46,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/FindEntities")
     suite.add("spec/h2datastore/AcceptsUUID")
     suite.add("spec/h2datastore/MapEntities")
+    suite.add("spec/h2datastore/GetAsJSON")
     suite.start()
   }
 }
