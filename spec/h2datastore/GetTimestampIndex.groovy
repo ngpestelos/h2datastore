@@ -18,6 +18,7 @@ class GetTimestampIndex extends GroovyTestCase {
   void testEmpty() {
     // when
     def index = entities.getIndex("some_property", true)
+    Thread.sleep(100)
 
     // then
     def now = new Date()
@@ -34,6 +35,7 @@ class GetTimestampIndex extends GroovyTestCase {
 
     // when
     def index = entities.getIndex("document_date", true)
+    Thread.sleep(100)
 
     // then
     def res = index.find(doc_date.time)
