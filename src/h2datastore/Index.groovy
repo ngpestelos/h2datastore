@@ -1,8 +1,6 @@
 package h2datastore
 
-import org.apache.commons.lang.builder.HashCodeBuilder
 import org.json.JSONObject
-import java.sql.Types
 
 /**
  * Index tables are used to query the entities table for certain properties
