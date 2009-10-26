@@ -123,6 +123,10 @@ class Entities {
         index
     }
 
+    def listenerCount() {
+        listeners.size()
+    }
+
     // @param list
     // @param closure (accepts one element)
     // @return another list
