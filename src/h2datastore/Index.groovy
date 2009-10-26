@@ -1,6 +1,7 @@
 package h2datastore
 
 import org.json.JSONObject
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 /**
  * Index tables are used to query the entities table for certain properties
@@ -125,4 +126,13 @@ class Index implements DatastoreListener {
     }
 
     //// End Callbacks
+
+
+    boolean equals(obj) {
+        return obj instanceof Index && this.hashCode() == obj.hashCode()
+    }
+
+    int hashCode() {
+        return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
+    }
 }
