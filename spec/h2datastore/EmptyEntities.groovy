@@ -1,24 +1,41 @@
+import h2datastore.*
 import groovy.sql.Sql
-import h2datastore.Entities
-import h2datastore.H2Utils
 
 class EmptyEntities extends GroovyTestCase {
 
-  // initial database, no rows in entries
+  def sql
+
+  void setUp() {
+    sql = Sql.newInstance(H2Utils.buildMemoryURL(), "sa", "")
+  }
+
+  void testFailOnGetInstance() {
+    shouldFail { Entities.getInstance() }   
+  }
+
+  void testWipeInstance() {
+    def e1 = Entities.newInstance(sql)
+    def e2 = Entities.newInstance(sql)
+
+    assertTrue (e1 != e2)
+  }
+
+  void testGetInstance() {
+    def e = Entities.newInstance(sql)
+    def f = Entities.getInstance()
+
+    assertTrue (e == f)
+  }
+
   void testNoRows() {
     // given
-    def url = H2Utils.buildMemoryURL()
+    def e = Entities.newInstance(sql)
 
     // when
-    def sql = Sql.newInstance(url, "sa", "")
-    def ent = Entities.getInstance(sql)
+    def res = sql.firstRow("select * from information_schema.tables where table_name = ?", ["ENTITIES"])
 
     // then
-    def rows = sql.rows("select * from information_schema.tables where table_name = ?", ["ENTITIES"])
-    assertTrue (1 == rows.size())
-
-    def data = sql.rows("select * from entities") 
-    assertTrue (0 == data.size())
+    assertNotNull res
   }
 
 }

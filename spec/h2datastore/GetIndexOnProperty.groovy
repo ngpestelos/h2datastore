@@ -1,6 +1,7 @@
 import h2datastore.Entities
 import h2datastore.H2Utils
 import groovy.sql.Sql
+
 import org.json.JSONObject
 
 class GetIndexOnProperty extends GroovyTestCase {
@@ -12,7 +13,7 @@ class GetIndexOnProperty extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
   }
 
   void testEmpty() {
@@ -28,7 +29,7 @@ class GetIndexOnProperty extends GroovyTestCase {
     def doc = new JSONObject()
     doc.put("name", "foo")
     doc.put("category", "abc")
-    entities.put(doc.toString())
+    entities.put(doc)
 
     // when
     def index = entities.getIndex("name")
@@ -43,6 +44,7 @@ class GetIndexOnProperty extends GroovyTestCase {
     def doc = new JSONObject()
     doc.put("name", "foo")
     doc.put("category", "abc")
+    entities.put(doc)
 
     // when
     def index = entities.getIndex("supplier")
@@ -50,6 +52,6 @@ class GetIndexOnProperty extends GroovyTestCase {
     // then
     def res = index.find("bar")
     assertNull res
-  } 
+  }
 
 }

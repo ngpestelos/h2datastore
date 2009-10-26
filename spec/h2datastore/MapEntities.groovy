@@ -11,7 +11,7 @@ class MapEntities extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
   }
 
   void testMapIDs() {

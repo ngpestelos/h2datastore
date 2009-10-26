@@ -12,7 +12,7 @@ class RemoveEntity extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
     removed = 0
     def listener = new Expando()
     listener.entityAdded = { }

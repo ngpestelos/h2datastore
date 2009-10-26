@@ -13,7 +13,7 @@ class UpdateIndex extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
     doc = new JSONObject()
     doc.put("name", "Nesingwary 4000")
   }

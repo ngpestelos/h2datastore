@@ -15,15 +15,28 @@ class Entities {
     private def Entities(sql) {
         this.logger = Logger.getLogger(Entities.class)
         this.sql = sql
-        createTable()
         this.listeners = []
+        createTable()
     }
 
-    static def getInstance(sql) {
+    /**
+     * Create a pristine Entities object.
+     *
+     * This is a wipe.
+     */
+    static def newInstance(sql) {
+        instance = new Entities(sql)
+        return instance
+    }
+
+    /**
+     * Return the current Entities instance
+     */
+    static def getInstance() {
         if (!instance)
-            instance = new Entities(sql)
-            
-        instance
+            throw new IllegalStateException("Call Entities.newInstance(sql) first.")
+        else
+            return instance
     }
 
     def addListener(listener) {
@@ -73,23 +86,6 @@ class Entities {
         return ["_id" : _id, "updated_at" : updated]
     }
 
-    def getAsJSON(UUID _ID) {
-        getAsJSON(_id.toString())
-    }
-
-    // @see Entities.get
-    def getAsJSON(String _id) {
-        def map = get(_id)
-        if (!map)
-            return null
-
-        def json = new JSONObject()
-        json.put("_id", map["_id"])
-        json.put("body", new JSONObject(map["body"]))
-        json.put("updated_at", map["updated_at"])
-        return json
-    }
-
     def get(UUID _id) {
         get(_id.toString())
     }
@@ -123,6 +119,7 @@ class Entities {
     }
 
     def getIndex(String property, Boolean timestamp = false) {
+        logger.debug("getIndex ${property} ${timestamp}")
         def index = new Index(sql, property, this, timestamp)
         addListener(index)
         index
@@ -130,6 +127,15 @@ class Entities {
 
     def listenerCount() {
         listeners.size()
+    }
+
+    def entityCount() {
+        def res = sql.firstRow("select count(_id) as num_entities from entities")
+        res["num_entities"]
+    }
+
+    def clearListeners() {
+        listeners.clear()
     }
 
     // @param list

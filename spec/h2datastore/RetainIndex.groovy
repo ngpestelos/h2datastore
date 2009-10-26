@@ -10,7 +10,7 @@ class RetainIndex extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
   }
 
   void testKeepTheseIndices() {
@@ -21,7 +21,7 @@ class RetainIndex extends GroovyTestCase {
     assert (2 == entities.listenerCount())
 
     // when
-    entities = Entities.getInstance(sql)
+    entities = Entities.getInstance()
 
     // then
     assertTrue (2 == entities.listenerCount()) 

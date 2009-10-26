@@ -13,7 +13,7 @@ class PutEntity extends GroovyTestCase {
   void setUp() {
     url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
-    entities = Entities.getInstance(sql)
+    entities = Entities.newInstance(sql)
     added = 0
     def listener = new Expando()
     listener.entityAdded = { added += 1 }
