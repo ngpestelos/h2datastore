@@ -35,7 +35,7 @@ class Index implements DatastoreListener {
     }
 
     String toString() {
-        "Index for ${property}"
+        return "${property}"
     }
 
     /**

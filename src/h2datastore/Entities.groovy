@@ -1,5 +1,6 @@
 package h2datastore
 
+import org.apache.log4j.Logger
 import org.json.JSONObject
 import java.util.UUID
 
@@ -7,6 +8,7 @@ class Entities {
 
     def sql
     def listeners
+    def logger
     
     private static def instance
 
@@ -16,6 +18,7 @@ class Entities {
         if (!instance)
             instance = new Entities()
 
+        instance.logger = Logger.getLogger(Entities.class)
         instance.sql = sql
         instance.createTable()
         instance.listeners = []
@@ -23,6 +26,7 @@ class Entities {
     }
 
     def addListener(listener) {
+        logger.debug("add listener ${listener}")
         if (!(listener in listeners))
             listeners << listener
     }
@@ -135,10 +139,12 @@ class Entities {
     }
 
     private def entityAdded(_id, body) {
+        logger.debug("entity added ${_id} ${body} ${listeners}")
         listeners.each { it.entityAdded(new DatastoreEvent(this, _id, body)) }
     }
 
     private def entityUpdated(_id, body) {
+        logger.debug("entity updated ${_id} ${body} ${listeners}")
         listeners.each { it.entityUpdated(new DatastoreEvent(this, _id, body)) }
     }
 
