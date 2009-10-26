@@ -12,16 +12,17 @@ class Entities {
     
     private static def instance
 
-    private def Entities() { }
+    private def Entities(sql) {
+        this.logger = Logger.getLogger(Entities.class)
+        this.sql = sql
+        createTable()
+        this.listeners = []
+    }
 
     static def getInstance(sql) {
         if (!instance)
-            instance = new Entities()
-
-        instance.logger = Logger.getLogger(Entities.class)
-        instance.sql = sql
-        instance.createTable()
-        instance.listeners = []
+            instance = new Entities(sql)
+            
         instance
     }
 
@@ -31,7 +32,7 @@ class Entities {
             listeners << listener
     }
 
-    def createTable() {
+    private def createTable() {
         def table = "create table if not exists entities (" +
             "added_id identity auto_increment primary key," +
             "_id uuid not null," +
