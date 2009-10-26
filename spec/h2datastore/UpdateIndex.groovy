@@ -28,8 +28,6 @@ class UpdateIndex extends GroovyTestCase {
     ndoc.put("name", "Fel Iron Musket")
     entities.update(id, ndoc.toString())
 
-    Thread.sleep(100)
-
     // then
     assertNull index.find("Nesingwary 4000")
     assertNotNull index.find("Fel Iron Musket")

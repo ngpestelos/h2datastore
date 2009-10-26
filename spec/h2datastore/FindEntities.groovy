@@ -21,8 +21,6 @@ class FindEntities extends GroovyTestCase {
     def id = entities.put(doc)
     def index = entities.getIndex("name")  
  
-    Thread.sleep(100)
- 
     // when
     def res = index.find("Nesingwary 4000")
 
@@ -42,8 +40,6 @@ class FindEntities extends GroovyTestCase {
     entities.put(first)
     entities.put(second)
     def index = entities.getIndex("category")
-
-    Thread.sleep(100)
 
     // when
     def res = index.findAll("Guns")

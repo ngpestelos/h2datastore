@@ -81,12 +81,10 @@ class Index implements DatastoreListener {
     }
 
     private def populateTable() {
-        Thread.start {
-            sql.rows("select * from entities").each {
-                def json = new JSONObject(it.body.characterStream.text)
-                if (json.has(property))
-                    put(json.get(property), it."_id")
-            }
+        sql.rows("select * from entities").each {
+            def json = new JSONObject(it.body.characterStream.text)
+            if (json.has(property))
+                put(json.get(property), it."_id")
         }
     }
 

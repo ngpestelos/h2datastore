@@ -38,8 +38,6 @@ class RemoveIndex extends GroovyTestCase {
     entities.put(category_doc.toString())
     def index = entities.getIndex("category")
 
-    Thread.sleep(100)
-
     // when
     entities.remove(id)
 

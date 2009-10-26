@@ -34,7 +34,6 @@ class GetIndexOnProperty extends GroovyTestCase {
     def index = entities.getIndex("name")
 
     // then
-    Thread.sleep(100) // allow the indexer to populate tables
     def res = index.find("foo")
     assertNotNull res
   }
