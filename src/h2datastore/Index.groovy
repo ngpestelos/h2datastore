@@ -2,6 +2,7 @@ package h2datastore
 
 import org.json.JSONObject
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.apache.log4j.Logger
 
 /**
  * Index tables are used to query the entities table for certain properties
@@ -13,6 +14,7 @@ class Index implements DatastoreListener {
     def property
     def sql
     def entities
+    def logger
 
     protected def Index(sql, property, entities, Boolean timestamp = false) {
         if (sql == null)
@@ -20,6 +22,7 @@ class Index implements DatastoreListener {
         if (property == null)
             throw new IllegalArgumentException("Property cannot be null.")
 
+        this.logger = Logger.getLogger(Index.class)
         this.sql = sql
         this.property = property
         this.entities = entities
@@ -71,6 +74,7 @@ class Index implements DatastoreListener {
 
     def put(value, eid) {
         def table = getTableName()
+        logger.debug("put ${table} ${value} ${eid}")
         sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
     }
 
@@ -106,18 +110,21 @@ class Index implements DatastoreListener {
 
     void entityAdded(dsEvent) {
         def json = new JSONObject(dsEvent.body)
+        logger.debug("entity added ${json}")
         if (json.has(property))
             put(json.get(property), dsEvent.id)
     }
 
     void entityUpdated(dsEvent) {
         def json = new JSONObject(dsEvent.body)
+        logger.debug("entity updated ${json}")
         if (json.has(property))
             put(json.get(property), dsEvent.id)
     }
 
     void entityRemoved(dsEvent) {
         def table = getTableName()
+        logger.debug("entity removed ${table}")
         sql.executeUpdate("delete from ${table} where entity_id = ?", [dsEvent.id])
     }
 
