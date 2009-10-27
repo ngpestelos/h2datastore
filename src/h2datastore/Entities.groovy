@@ -40,9 +40,10 @@ class Entities {
     }
 
     def addListener(listener) {
-        logger.debug("add listener ${listener}")
-        if (!(listener in listeners))
+        if (!(listener in listeners)) {
+            logger.debug("add listener ${listener}")
             listeners << listener
+        }
     }
 
     private def createTable() {
@@ -156,6 +157,7 @@ class Entities {
     }
 
     private def entityRemoved(_id) {
+        logger.debug("entity removed ${_id}")
         listeners.each { it.entityRemoved(new DatastoreEvent(this, _id)) }
     }
 	
