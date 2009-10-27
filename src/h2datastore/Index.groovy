@@ -12,20 +12,15 @@ import org.apache.log4j.Logger
 class Index implements DatastoreListener {
 
     def property
-    def sql
-    def entities
     def logger
+    def entities
+    def sql
 
-    protected def Index(sql, property, entities, Boolean timestamp = false) {
-        if (sql == null)
-            throw new IllegalArgumentException("SQL cannot be null.")
-        if (property == null)
-            throw new IllegalArgumentException("Property cannot be null.")
-
+    protected def Index(property, Boolean timestamp = false) {
         this.logger = Logger.getLogger(Index.class)
-        this.sql = sql
         this.property = property
-        this.entities = entities
+        this.entities = Entities.getInstance()
+        this.sql = entities.sql
         def tableExists = sql.firstRow("select TABLE_NAME from information_schema.tables where table_name = ?",
             ["INDEX_" + property.toUpperCase()])
         if (!tableExists) {

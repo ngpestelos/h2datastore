@@ -121,7 +121,7 @@ class Entities {
 
     def getIndex(String property, Boolean timestamp = false) {
         logger.debug("getIndex ${property} ${timestamp}")
-        def index = new Index(sql, property, this, timestamp)
+        def index = new Index(property, timestamp)
         addListener(index)
         index
     }
