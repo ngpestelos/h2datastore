@@ -35,8 +35,8 @@ class Entities {
     static def getInstance() {
         if (!instance)
             throw new IllegalStateException("Call Entities.newInstance(sql) first.")
-        else
-            return instance
+            
+        return instance
     }
 
     def addListener(listener) {

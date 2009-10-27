@@ -79,6 +79,7 @@ class Index implements DatastoreListener {
     }
 
     private def createTable(Boolean timestamp) {
+        logger.debug("creating index table for ${property}")
         def dataType = timestamp ? "bigint" : "varchar(768)"
         def query = "create table if not exists index_" + property + " ( " + property + " " + dataType +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
@@ -86,6 +87,7 @@ class Index implements DatastoreListener {
     }
 
     private def populateTable() {
+        logger.debug("populating index table for ${property}")
         sql.rows("select * from entities").each {
             def json = new JSONObject(it.body.characterStream.text)
             if (json.has(property))
