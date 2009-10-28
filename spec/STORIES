@@ -16,4 +16,5 @@
 * <del>Update accepts JSON</del>
 * <del>Find an Entity having property = value</del>
 * <del>Find all Entities having properties = value</del>
-* mapreduce
+* <del>Test Connection parameters</del>
+* Remove Map function (redundant -- use Groovy's collect instead)

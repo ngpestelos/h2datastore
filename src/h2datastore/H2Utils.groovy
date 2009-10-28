@@ -46,4 +46,20 @@ class H2Utils {
         server.stop()
     }
 
+    /**
+     * @param url
+     * @param username
+     * @param password
+     */
+    static Boolean testConnection(String url, String username, String password) {
+        def sql
+
+        try {
+            sql = Sql.newInstance(url, username, password)
+        } catch (e) {
+            return false
+        }
+        
+        return (sql != null)
+    }
 }
