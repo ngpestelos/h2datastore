@@ -49,4 +49,18 @@ class UpdateIndex extends GroovyTestCase {
     // then
     assertNotNull index.find("def")
   }
+
+  void testRemoveThisProperty() {
+    // given
+    doc.put("category", "Guns")
+    def id = entities.put(doc.toString())
+    def index = entities.getIndex("name")
+
+    // when
+    doc.remove("name")
+    entities.update(id, doc.toString())
+
+    // then
+    assertNull index.find("Nesingwary 4000")
+  }
 }

@@ -114,9 +114,16 @@ class Index implements DatastoreListener {
 
     void entityUpdated(dsEvent) {
         def json = new JSONObject(dsEvent.body)
+        def table = getTableName()
         logger.debug("entity updated ${json}")
-        if (json.has(property))
+        if (json.has(property)) {
             put(json.get(property), dsEvent.id)
+        } else {
+            def res = sql.firstRow("select * from ${table} where entity_id = ?", [dsEvent.id])
+            if (!res)
+                return
+            remove(dsEvent.id)
+        }
     }
 
     void entityRemoved(dsEvent) {
