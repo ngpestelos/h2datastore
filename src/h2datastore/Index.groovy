@@ -138,10 +138,6 @@ class Index implements DatastoreListener {
         sql.executeUpdate("delete from ${table} where entity_id = ?", [dsEvent.id])
     }
 
-    void cleanup(dsEvent) {
-        //populate()
-    }
-
     //// End Callbacks
 
     boolean equals(obj) {

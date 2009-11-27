@@ -10,7 +10,4 @@ interface DatastoreListener extends EventListener {
 
     void entityRemoved(event)
 
-    void cleanup(event)
-
 }
-
