@@ -16,7 +16,7 @@ class Index implements DatastoreListener {
     def entities
     def sql
 
-    protected def Index(property, Boolean timestamp = false) {
+    protected def Index(property) {
         this.logger = Logger.getLogger(Index.class)
         this.property = property
         this.entities = Entities.getInstance()
@@ -24,7 +24,7 @@ class Index implements DatastoreListener {
         def tableExists = sql.firstRow("select TABLE_NAME from information_schema.tables where table_name = ?",
             ["INDEX_" + property.toUpperCase()])
         if (!tableExists) {
-            createTable(timestamp)
+            createTable()
             populateTable()
         }
     }
@@ -73,9 +73,9 @@ class Index implements DatastoreListener {
         sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
     }
 
-    private def createTable(Boolean timestamp) {
+    private def createTable() {
         logger.debug("creating index table for ${property}")
-        def dataType = timestamp ? "bigint" : "varchar(768)"
+        def dataType = "varchar(768)"
         def query = "create table if not exists index_" + property + " ( " + property + " " + dataType +
             " not null, entity_id uuid not null, primary key (" + property + ", entity_id) )";
         sql.executeUpdate(query)

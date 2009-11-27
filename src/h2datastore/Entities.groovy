@@ -119,9 +119,9 @@ class Entities {
         return rows_affected
     }
 
-    def getIndex(String property, Boolean timestamp = false) {
-        logger.debug("getIndex ${property} ${timestamp}")
-        def index = new Index(property, timestamp)
+    def getIndex(String property) {
+        logger.debug("getIndex ${property}")
+        def index = new Index(property)
         addListener(index)
         index
     }
