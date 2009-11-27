@@ -20,10 +20,9 @@ class Index implements DatastoreListener {
         this.logger = Logger.getLogger(Index.class)
         this.property = property
         this.entities = Entities.getInstance()
-        this.sql = entities.sql
-        def tableExists = sql.firstRow("select TABLE_NAME from information_schema.tables where table_name = ?",
-            ["INDEX_" + property.toUpperCase()])
-        if (!tableExists) {
+        this.sql = _getSql()
+        
+        if (!tableExists()) {
             createTable()
             populateTable()
         }
@@ -95,10 +94,17 @@ class Index implements DatastoreListener {
     }
 
     private def getTableName() {
-        "index_${property}"
+        "index_${property}".toUpperCase()
+    }
+
+    def tableExists() {
+      def res = sql.firstRow("select TABLE_NAME from information_schema.tables where table_name = ?", [getTableName()])
+      res != null
     }
 
     def size() {
+        assert tableExists()
+
         def res = sql.firstRow("select count(*) as numrows from " + getTableName())
         res ? res["numrows"] : 0
     }
@@ -138,12 +144,23 @@ class Index implements DatastoreListener {
 
     //// End Callbacks
 
-
     boolean equals(obj) {
         return obj instanceof Index && this.hashCode() == obj.hashCode()
     }
 
     int hashCode() {
         return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
+    }
+
+    static def allTables() {
+      def sql = _getSql()
+
+      def filtered = sql.rows("select TABLE_NAME from information_schema.tables").findAll { it["TABLE_NAME"] =~ /^INDEX_/ }
+      filtered.collect { it["TABLE_NAME"] }
+    }
+
+    private static def _getSql() {
+      def entities = Entities.getInstance()
+      entities.sql
     }
 }
