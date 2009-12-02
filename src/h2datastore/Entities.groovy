@@ -4,6 +4,8 @@ import org.apache.log4j.Logger
 import org.json.JSONObject
 import java.util.UUID
 
+import groovy.sql.Sql
+
 class Entities {
 
     def sql
@@ -16,7 +18,7 @@ class Entities {
         this.logger = Logger.getLogger(Entities.class)
         this.sql = sql
         this.listeners = []
-        createTable()
+        Entities.initialize(sql)
     }
 
     /**
@@ -159,6 +161,32 @@ class Entities {
     private def entityRemoved(_id) {
         logger.debug("entity removed ${_id}")
         listeners.each { it.entityRemoved(new DatastoreEvent(this, _id)) }
+    }
+
+    def copy(destSql) {
+        logger.debug("copying ${entityCount()}")
+        def count = 0
+        sql.rows("select * from entities").each {
+            destSql.executeUpdate("merge into entities (added_id, _id, body, updated_at) key(_id) values (?, ?, ?, ?)",
+                [it["ADDED_ID"], it["_ID"], it["BODY"], it["UPDATED_AT"]])
+            count += 1
+        }
+        logger.debug("copied ${count}")
+    }
+
+    static def initialize(sql) {
+        def table = "create table if not exists entities (" +
+            "added_id identity auto_increment primary key," +
+            "_id uuid not null," +
+            "body clob," +
+            "updated_at timestamp not null);"
+        sql.executeUpdate(table)
+
+        def index_1 = "create index if not exists ix_entities_id on entities(_id);";
+        sql.executeUpdate(index_1)
+
+        def index_2 = "create index if not exists ix_entities_timestamp on entities(updated_at);";
+        sql.executeUpdate(index_2)
     }
 	
 }

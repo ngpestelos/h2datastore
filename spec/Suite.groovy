@@ -50,6 +50,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/IndexCount")
     suite.add("spec/h2datastore/RetainIndex")
     suite.add("spec/h2datastore/TestConnectionParams")
+    suite.add("spec/h2datastore/CopyEntities")
     suite.start()
   }
 }
