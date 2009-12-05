@@ -2,14 +2,13 @@ import h2datastore.*
 import groovy.sql.Sql
 import org.json.JSONObject
 
-class AcceptsJSON extends GroovyTestCase {
+class EntityAcceptsJSON extends GroovyTestCase {
 
-  def url
   def entities
   def sql
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
+    def url = H2Utils.buildMemoryURL()
     sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
   }

@@ -30,6 +30,8 @@ class Suite extends groovy.util.GroovyTestSuite {
   static void main(args) {
     def suite = new Suite()
     suite.with {
+      add("spec/h2datastore/EntityAcceptsJSON")
+      add("spec/h2datastore/EntityAcceptsUUID")
       add("spec/h2datastore/EntityCopy")
       add("spec/h2datastore/EntityEmpty")
       add("spec/h2datastore/EntityFind")
