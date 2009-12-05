@@ -141,13 +141,6 @@ class Entities {
         listeners.clear()
     }
 
-    // @param list
-    // @param closure (accepts one element)
-    // @return another list
-    static def map(list, closure) {
-        list.collect { closure(it) }
-    }
-
     private def entityAdded(_id, body) {
         logger.debug("entity added ${_id} ${body} ${listeners}")
         listeners.each { it.entityAdded(new DatastoreEvent(this, _id, body)) }
