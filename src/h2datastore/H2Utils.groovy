@@ -31,21 +31,6 @@ class H2Utils {
         isExisting ? "${url};IFEXISTS=TRUE" : url
     }
 
-    // Creates a H2 Server instance and tries to start it
-    // See H2 documentation
-    // @return server
-    static def startServer(options) {
-        def server = Server.createTcpServer(options)
-        server.start()
-        server
-    }
-
-    // Stops a H2 Server
-    // @param server
-    static def stopServer(server) {
-        server.stop()
-    }
-
     /**
      * @param url
      * @param username
