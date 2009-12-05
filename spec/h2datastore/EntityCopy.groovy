@@ -2,7 +2,7 @@ import h2datastore.*
 import groovy.sql.Sql
 import org.json.JSONObject
 
-class CopyEntities extends GroovyTestCase {
+class EntityCopy extends GroovyTestCase {
 
   def sql
   def entities

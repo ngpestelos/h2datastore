@@ -10,6 +10,9 @@ class EntityEmpty extends GroovyTestCase {
   }
 
   void testFailOnGetInstance() {
+    // given
+    Entities.reset()
+
     shouldFail { Entities.getInstance() }   
   }
 

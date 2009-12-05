@@ -181,6 +181,11 @@ class Entities {
         def index_2 = "create index if not exists ix_entities_timestamp on entities(updated_at);";
         sql.executeUpdate(index_2)
     }
+
+    // TODO I'm still trying to figure out how to drop the instance
+    static def reset() {
+        instance = null
+    }
 	
 }
 
