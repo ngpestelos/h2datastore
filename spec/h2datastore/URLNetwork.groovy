@@ -1,6 +1,6 @@
 import h2datastore.H2Utils
 
-class NetworkURL extends GroovyTestCase {
+class URLNetwork extends GroovyTestCase {
 
   void testBuildURL_1() {
     // given

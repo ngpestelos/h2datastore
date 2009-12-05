@@ -1,6 +1,6 @@
 import h2datastore.H2Utils
 
-class MemoryURL extends GroovyTestCase {
+class URLMemory extends GroovyTestCase {
 
   void testBuildURL_1() {
     // given

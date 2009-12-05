@@ -1,6 +1,6 @@
 import h2datastore.H2Utils
 
-class StandaloneURL extends GroovyTestCase {
+class URLStandalone extends GroovyTestCase {
 
   void testBuildURL_1() {
     // given
