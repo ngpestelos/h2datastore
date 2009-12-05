@@ -4,14 +4,12 @@ import org.json.JSONObject
 
 class IndexEvents extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def index_name
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     index_name = entities.getIndex("name")
   }
