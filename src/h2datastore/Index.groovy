@@ -149,17 +149,4 @@ class Index implements DatastoreListener {
                 put(json.get(property), it."_id")
         }
     }
-
-    /*
-    static def allTables() {
-      def sql = _getSql()
-
-      def filtered = sql.rows("select TABLE_NAME from information_schema.tables").findAll { it["TABLE_NAME"] =~ /^INDEX_/ }
-      filtered.collect { it["TABLE_NAME"] }
-    }
-
-    private static def _getSql() {
-      def entities = Entities.getInstance()
-      entities.sql
-    }*/
 }
