@@ -1,18 +1,15 @@
-import h2datastore.H2Utils
-import h2datastore.Entities
+import h2datastore.*
 import groovy.sql.Sql
 import org.json.JSONObject
 
-class RemoveIndex extends GroovyTestCase {
+class IndexRemove extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def doc
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     doc = new JSONObject()
     doc.put("name", "Nesingwary 4000")
@@ -20,7 +17,7 @@ class RemoveIndex extends GroovyTestCase {
 
   void testRemoveMatchingEntity() {
     // given
-    def id = entities.put(doc.toString())
+    def id = entities.put(doc)
     def index = entities.getIndex("name")
 
     // when
@@ -32,16 +29,16 @@ class RemoveIndex extends GroovyTestCase {
 
   void testRemoveNothing() {
     // given
-    def id = entities.put(doc.toString())
-    def category_doc = new JSONObject()
-    category_doc.put("category", "something")
-    entities.put(category_doc.toString())
-    def index = entities.getIndex("category")
+    def other_index = entities.getIndex("category")
+    def other_doc = new JSONObject()
+    other_doc.put("category", "something")
+    entities.put(other_doc.toString())
 
     // when
+    def id = entities.put(doc.toString())
     entities.remove(id)
 
     // then
-    assertNotNull index.find("something")
+    assertNotNull other_index.find("something")
   }
 }

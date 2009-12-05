@@ -20,12 +20,9 @@ class Index implements DatastoreListener {
         this.logger = Logger.getLogger(Index.class)
         this.property = property
         this.entities = Entities.getInstance()
-        this.sql = _getSql()
-        
-        if (!tableExists()) {
+        this.sql = entities.sql
+        if (!tableExists())
             createTable()
-            populateTable()
-        }
     }
 
     String toString() {
@@ -80,6 +77,7 @@ class Index implements DatastoreListener {
         sql.executeUpdate(query)
     }
 
+    /*
     private def populateTable() {
         logger.debug("populating index table for ${property}")
         sql.rows("select * from entities").each {
@@ -87,7 +85,7 @@ class Index implements DatastoreListener {
             if (json.has(property))
                 put(json.get(property), it."_id")
         }
-    }
+    }*/
 
     def remove(entityID) {
         sql.executeUpdate("delete from ${getTableName()} where entity_id = ?", [entityID])
@@ -148,6 +146,7 @@ class Index implements DatastoreListener {
         return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
     }
 
+    /*
     static def allTables() {
       def sql = _getSql()
 
@@ -158,5 +157,5 @@ class Index implements DatastoreListener {
     private static def _getSql() {
       def entities = Entities.getInstance()
       entities.sql
-    }
+    }*/
 }

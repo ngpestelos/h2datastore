@@ -29,6 +29,18 @@ class Suite extends groovy.util.GroovyTestSuite {
 
   static void main(args) {
     def suite = new Suite()
+    suite.with {
+      add("spec/h2datastore/IndexNewlyCreated")
+      add("spec/h2datastore/IndexPut")
+      add("spec/h2datastore/IndexRemove")
+      add("spec/h2datastore/IndexToString")
+      start()
+    }
+  }
+
+  /*
+  static void main(args) {
+    def suite = new Suite()
     suite.add("spec/h2datastore/StandaloneURL")
     suite.add("spec/h2datastore/MemoryURL")
     suite.add("spec/h2datastore/NetworkURL")
@@ -52,5 +64,5 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.add("spec/h2datastore/TestConnectionParams")
     suite.add("spec/h2datastore/CopyEntities")
     suite.start()
-  }
+  }*/
 }

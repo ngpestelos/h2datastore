@@ -1,18 +1,15 @@
-import h2datastore.H2Utils
-import h2datastore.Entities
+import h2datastore.*
 import groovy.sql.Sql
 import org.json.JSONObject
 
-class PutIndex extends GroovyTestCase {
+class IndexPut extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def doc
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     doc = new JSONObject()
     doc.put("name", "Nesingwary 4000")
@@ -23,7 +20,7 @@ class PutIndex extends GroovyTestCase {
       def index = entities.getIndex("name")
 
       // when
-      entities.put(doc.toString())
+      entities.put(doc)
 
       // then
       def res = index.find("Nesingwary 4000")
@@ -35,7 +32,7 @@ class PutIndex extends GroovyTestCase {
       def index = entities.getIndex("some_property")
 
       // when
-      entities.put(doc.toString())
+      entities.put(doc)
 
       // then
       assertNull index.find("foo")
