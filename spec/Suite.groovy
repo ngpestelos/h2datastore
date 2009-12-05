@@ -31,6 +31,7 @@ class Suite extends groovy.util.GroovyTestSuite {
     def suite = new Suite()
     suite.with {
       add("spec/h2datastore/EntityListenerCount")
+      add("spec/h2datastore/EntityRemove")
       add("spec/h2datastore/EntityUpdate")
       add("spec/h2datastore/IndexClear")
       add("spec/h2datastore/IndexEquality")

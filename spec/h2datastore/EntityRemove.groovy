@@ -1,17 +1,14 @@
-import h2datastore.Entities
-import h2datastore.H2Utils
+import h2datastore.*
 import groovy.sql.Sql
 
-class RemoveEntity extends GroovyTestCase {
+class EntityRemove extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def removed
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     removed = 0
     def listener = new Expando()
