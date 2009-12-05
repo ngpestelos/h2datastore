@@ -1,7 +1,7 @@
 import h2datastore.*
 import groovy.sql.Sql
 
-class EmptyEntities extends GroovyTestCase {
+class EntityEmpty extends GroovyTestCase {
 
   def sql
 
