@@ -1,18 +1,15 @@
-import h2datastore.Entities
-import h2datastore.H2Utils
+import h2datastore.*
 import groovy.sql.Sql
 
 import org.json.JSONObject
 
-class GetIndexOnProperty extends GroovyTestCase {
+class EntityGetIndex extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
   }
 
@@ -26,31 +23,31 @@ class GetIndexOnProperty extends GroovyTestCase {
 
   void testNotEmpty() {
     // given
+    def index = entities.getIndex("name")
     def doc = new JSONObject()
     doc.put("name", "foo")
     doc.put("category", "abc")
     entities.put(doc)
 
     // when
-    def index = entities.getIndex("name")
+    def res = index.find("foo")
 
     // then
-    def res = index.find("foo")
     assertNotNull res
   }
 
   void testNoPropertiesMatching() {
     // given
+    def index = entities.getIndex("supplier")
     def doc = new JSONObject()
     doc.put("name", "foo")
     doc.put("category", "abc")
     entities.put(doc)
 
     // when
-    def index = entities.getIndex("supplier")
+    def res = index.find("bar")
 
     // then
-    def res = index.find("bar")
     assertNull res
   }
 
