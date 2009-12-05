@@ -1,15 +1,13 @@
 import h2datastore.*
 import groovy.sql.Sql
 
-class IndexCount extends GroovyTestCase {
+class EntityListenerCount extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
   }
 
