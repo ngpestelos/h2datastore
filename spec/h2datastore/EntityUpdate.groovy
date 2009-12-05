@@ -1,16 +1,14 @@
 import h2datastore.*
 import groovy.sql.Sql
 
-class UpdateEntity extends GroovyTestCase {
+class EntityUpdate extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def updated
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     updated = 0
     def listener = new Expando()
@@ -34,17 +32,4 @@ class UpdateEntity extends GroovyTestCase {
     // ...and a listener should get an event
     assertTrue (1 == updated)
   }
-
-  /*
-  void testUpdateNone() {
-    // when
-    def res = entities.update("abcde", "foo")
-
-    // then
-    assertTrue ([:] == res)
-
-    // ...and no events have been sent
-    assertTrue (0 == updated)
-  }*/
-
 }
