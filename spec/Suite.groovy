@@ -33,6 +33,7 @@ class Suite extends groovy.util.GroovyTestSuite {
       add("spec/h2datastore/EntityListenerCount")
       add("spec/h2datastore/IndexClear")
       add("spec/h2datastore/IndexEquality")
+      add("spec/h2datastore/IndexLoad")
       add("spec/h2datastore/IndexNewlyCreated")
       add("spec/h2datastore/IndexPut")
       add("spec/h2datastore/IndexRemove")

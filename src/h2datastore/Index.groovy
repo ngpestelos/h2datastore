@@ -77,16 +77,6 @@ class Index implements DatastoreListener {
         sql.executeUpdate(query)
     }
 
-    /*
-    private def populateTable() {
-        logger.debug("populating index table for ${property}")
-        sql.rows("select * from entities").each {
-            def json = new JSONObject(it.body.characterStream.text)
-            if (json.has(property))
-                put(json.get(property), it."_id")
-        }
-    }*/
-
     def remove(entityID) {
         sql.executeUpdate("delete from ${getTableName()} where entity_id = ?", [entityID])
     }
@@ -148,6 +138,16 @@ class Index implements DatastoreListener {
 
     def clear() {
         sql.executeUpdate("delete from " + getTableName())
+    }
+
+    def load() {
+        clear()
+        logger.debug("populating index table for ${property}")
+        sql.rows("select * from entities").each {
+            def json = new JSONObject(it.body.characterStream.text)
+            if (json.has(property))
+                put(json.get(property), it."_id")
+        }
     }
 
     /*
