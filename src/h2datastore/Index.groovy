@@ -66,7 +66,7 @@ class Index implements DatastoreListener {
     def put(value, eid) {
         def table = getTableName()
         logger.debug("put ${table} ${value} ${eid}")
-        sql.executeUpdate("merge into ${table} (${property}, entity_id) key (entity_id) values (?, ?)", [value, eid])
+        sql.executeUpdate("merge into ${table} (${property}, entity_id) values (?, ?)", [value, eid])
     }
 
     private def createTable() {
