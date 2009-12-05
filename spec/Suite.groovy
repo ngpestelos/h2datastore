@@ -36,6 +36,7 @@ class Suite extends groovy.util.GroovyTestSuite {
       add("spec/h2datastore/IndexPut")
       add("spec/h2datastore/IndexRemove")
       add("spec/h2datastore/IndexRetain")
+      add("spec/h2datastore/IndexSize")
       add("spec/h2datastore/IndexToString")
       add("spec/h2datastore/IndexUpdate")
       start()
