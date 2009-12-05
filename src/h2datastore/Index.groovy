@@ -146,6 +146,10 @@ class Index implements DatastoreListener {
         return new HashCodeBuilder(15, 55).append(sql).append(property).toHashCode()
     }
 
+    def clear() {
+        sql.executeUpdate("delete from " + getTableName())
+    }
+
     /*
     static def allTables() {
       def sql = _getSql()
