@@ -1,18 +1,15 @@
-import h2datastore.Entities
-import h2datastore.H2Utils
+import h2datastore.*
 import groovy.sql.Sql
 import org.json.JSONObject
 
-class PutEntity extends GroovyTestCase {
+class EntityPut extends GroovyTestCase {
 
-  def url
-  def sql
   def entities
   def added
 
   void setUp() {
-    url = H2Utils.buildMemoryURL()
-    sql = Sql.newInstance(url, "sa", "")
+    def url = H2Utils.buildMemoryURL()
+    def sql = Sql.newInstance(url, "sa", "")
     entities = Entities.newInstance(sql)
     added = 0
     def listener = new Expando()
