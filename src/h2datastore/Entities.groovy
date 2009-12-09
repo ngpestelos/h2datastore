@@ -156,17 +156,6 @@ class Entities {
         listeners.each { it.entityRemoved(new DatastoreEvent(this, _id)) }
     }
 
-    def copy(destSql) {
-        logger.debug("copying ${entityCount()}")
-        def count = 0
-        sql.rows("select * from entities").each {
-            destSql.executeUpdate("merge into entities (added_id, _id, body, updated_at) key(_id) values (?, ?, ?, ?)",
-                [it["ADDED_ID"], it["_ID"], it["BODY"], it["UPDATED_AT"]])
-            count += 1
-        }
-        logger.debug("copied ${count}")
-    }
-
     static def initialize(sql) {
         def table = "create table if not exists entities (" +
             "added_id identity auto_increment primary key," +
