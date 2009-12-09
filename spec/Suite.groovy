@@ -32,7 +32,6 @@ class Suite extends groovy.util.GroovyTestSuite {
     suite.with {
       add("spec/h2datastore/EntityAcceptsJSON")
       add("spec/h2datastore/EntityAcceptsUUID")
-      add("spec/h2datastore/EntityCopy")
       add("spec/h2datastore/EntityEmpty")
       add("spec/h2datastore/EntityFind")
       add("spec/h2datastore/EntityGetIndex")
@@ -51,7 +50,6 @@ class Suite extends groovy.util.GroovyTestSuite {
       add("spec/h2datastore/IndexToString")
       add("spec/h2datastore/IndexUpdate")
       add("spec/h2datastore/Janitor")
-      add("spec/h2datastore/TestConnection")
       add("spec/h2datastore/URLMemory")
       add("spec/h2datastore/URLNetwork")
       add("spec/h2datastore/URLStandalone")
